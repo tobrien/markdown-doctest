@@ -1,8 +1,9 @@
 {
-  "name": "markdown-doctest",
-  "version": "1.1.0",
+  "name": "@tobrien/markdown-doctest",
+  "version": "1.2.0",
   "description": "Test all the code in your markdown docs!",
   "main": "dist/doctest.js",
+  "packageManager": "pnpm@10.10.0",
   "files": [
     "dist",
     "bin"
@@ -12,38 +13,46 @@
   },
   "scripts": {
     "build": "tsc",
-    "format": "prettier --write \"**/*.ts\"",
+    "lint": "eslint . --ext .ts",
     "test": "jest",
-    "prepublish": "yarn build"
+    "prepublish": "pnpm run build",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm run clean && pnpm run build"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Widdershin/markdown-doctest.git"
+    "url": "https://github.com/tobrien/markdown-doctest.git"
   },
   "keywords": [
     "markdown",
     "test",
     "documentation"
   ],
-  "author": "Nick Johnstone",
+  "contributors": [
+    "Nick Johnstone",
+    "Tim O'Brien <tobrien@discursive.com>"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Widdershin/markdown-doctest/issues"
+    "url": "https://github.com/tobrien/markdown-doctest/issues"
   },
-  "homepage": "https://github.com/Widdershin/markdown-doctest",
+  "homepage": "https://github.com/tobrien/markdown-doctest",
   "devDependencies": {
-    "@babel/preset-typescript": "^7.6.0",
-    "@types/node": "^12.7.12",
-    "jest": "^24.9.0",
-    "prettier": "1.18.2",
-    "typescript": "^3.6.4"
+    "@babel/preset-typescript": "^7.27.1",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.23.0",
+    "@types/node": "^22.15.17",
+    "eslint": "^9.24.0",
+    "eslint-plugin-import": "^2.31.0",
+    "jest": "^29.7.0",
+    "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@babel/core": "^7.6.4",
-    "@babel/preset-env": "^7.6.3",
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.2",
     "chalk": "^2.4.2",
-    "commander": "^4.0.1",
-    "glob": "^7.1.4"
+    "commander": "^4.1.1",
+    "glob": "^7.2.3"
   },
   "babel": {
     "presets": [
