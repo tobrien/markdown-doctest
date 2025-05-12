@@ -199,3 +199,104 @@ describe("runTests", () => {
         assert.strictEqual(passingResults.length, 1);
     });
 });
+
+describe("Results printing and error handling", () => {
+    let originalConsoleLog;
+    let originalStdoutWrite;
+    let logOutput = [];
+    let writeOutput = [];
+
+    beforeEach(() => {
+        logOutput = [];
+        writeOutput = [];
+        originalConsoleLog = console.log;
+        originalStdoutWrite = process.stdout.write;
+
+        console.log = (...args) => {
+            logOutput.push(args.join(" "));
+        };
+
+        process.stdout.write = (str) => {
+            writeOutput.push(str);
+            return true;
+        };
+    });
+
+    afterEach(() => {
+        console.log = originalConsoleLog;
+        process.stdout.write = originalStdoutWrite;
+    });
+
+    it("prints results with passing, failing and skipped tests", () => {
+        const mockResults = [
+            { status: "pass", codeSnippet: { fileName: "test.md", lineNumber: 10 }, stack: "" },
+            { status: "fail", codeSnippet: { fileName: "test.md", lineNumber: 20 }, stack: "Error at eval" },
+            { status: "skip", codeSnippet: { fileName: "test.md", lineNumber: 30 }, stack: "" }
+        ];
+
+        doctest.printResults(mockResults);
+
+        // Check that it counted correctly
+        assert(logOutput.some(line => line.includes("Passed: 1")));
+        assert(logOutput.some(line => line.includes("Failed: 1")));
+        assert(logOutput.some(line => line.includes("Skipped: 1")));
+    });
+
+    it("prints success message when no failures", () => {
+        const mockResults = [
+            { status: "pass", codeSnippet: { fileName: "test.md", lineNumber: 10 }, stack: "" },
+            { status: "skip", codeSnippet: { fileName: "test.md", lineNumber: 30 }, stack: "" }
+        ];
+
+        doctest.printResults(mockResults);
+
+        assert(logOutput.some(line => line.includes("Success!")));
+        assert(!logOutput.some(line => line.includes("Failed:")));
+    });
+
+    it("prints helpful message for undefined variables", () => {
+        const mockResults = [
+            {
+                status: "fail",
+                codeSnippet: { fileName: "test.md", lineNumber: 20 },
+                stack: "ReferenceError: myVariable is not defined\n    at eval"
+            }
+        ];
+
+        doctest.printResults(mockResults);
+
+        // Verify it suggests adding myVariable to globals
+        assert(logOutput.some(line => line.includes("myVariable")));
+        assert(logOutput.some(line => line.includes("globals")));
+    });
+
+    it("handles module not found errors in tests", () => {
+        const files = [getTestFilePath("module-not-found.md")];
+        const config = {
+            require: {} // Empty require config so the require in the test file will fail
+        };
+
+        const results = doctest.runTests(files, config);
+        const failingResults = results.filter(result => result.status === "fail");
+
+        assert.strictEqual(failingResults.length, 1);
+        assert(failingResults[0].stack.includes("Attempted to require"));
+    });
+
+    it("parses markdown error locations from stack traces", () => {
+        const files = [getTestFilePath("fail-with-line-numbers.md")];
+        const config = {};
+
+        const results = doctest.runTests(files, config);
+        const failingResults = results.filter(result => result.status === "fail");
+
+        // Print the results to trigger markDownErrorLocation
+        doctest.printResults(results);
+
+        // Verify that the error location was printed with line numbers
+        assert(logOutput.some(line => {
+            return line.includes("Failed - ") &&
+                (line.includes(":") || line.includes(failingResults[0].codeSnippet.fileName));
+        }));
+    });
+});
