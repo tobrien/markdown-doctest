@@ -1,6 +1,6 @@
 {
   "name": "@tobrien/markdown-doctest",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Test all the code in your markdown docs!",
   "main": "dist/doctest.js",
   "packageManager": "pnpm@10.10.0",
