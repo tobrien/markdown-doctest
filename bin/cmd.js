@@ -21,7 +21,8 @@ const DEFAULT_IGNORE = [
 const config = {
     require: {},
     globals: {},
-    ignore: []
+    ignore: [],
+    testOutput: false
 };
 
 // Setup commander
@@ -31,6 +32,7 @@ program
     .version(version, '-v, --version', 'output the current version')
     .helpOption('-h, --help', 'output usage informations')
     .option('-c, --config <path>', 'custom config location', path.join(process.cwd(), '/.markdown-doctest-setup.js'))
+    .option('--test-output', 'output the test results to the console')
     .parse(process.argv);
 
 // Parse config file
@@ -47,6 +49,10 @@ program
                 process.exit(1);
             }
         }
+    }
+
+    if (program.testOutput) {
+        config.testOutput = true;
     }
 
     // Resolve files

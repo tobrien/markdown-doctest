@@ -18,6 +18,7 @@ import parseCodeSnippets, {
 } from "./parse-code-snippets-from-markdown";
 
 interface Config {
+    testOutput?: boolean;
     globals?: {
         [key: string]: any;
     };
@@ -79,7 +80,7 @@ function makeTestSandbox(config: Config): Sandbox {
         log: () => null,
     };
 
-    const sandboxGlobals = { require: sandboxRequire, console: sandboxConsole };
+    const sandboxGlobals = { require: sandboxRequire, console: config.testOutput ? console : sandboxConsole };
     const sandbox = Object.assign({}, sandboxGlobals, config.globals);
 
     return sandbox;
