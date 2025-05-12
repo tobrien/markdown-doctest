@@ -1,7 +1,6 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import importPlugin from "eslint-plugin-import";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import globals from "globals";
 import tsParser from "@typescript-eslint/parser";
 import path from "node:path";

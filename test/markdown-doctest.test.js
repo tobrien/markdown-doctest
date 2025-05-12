@@ -1,4 +1,4 @@
-/* globals describe, it */
+/* globals describe, it, beforeEach, afterEach */
 "use strict";
 
 import path from "path";
@@ -209,9 +209,11 @@ describe("Results printing and error handling", () => {
     beforeEach(() => {
         logOutput = [];
         writeOutput = [];
+        // eslint-disable-next-line no-console
         originalConsoleLog = console.log;
         originalStdoutWrite = process.stdout.write;
 
+        // eslint-disable-next-line no-console
         console.log = (...args) => {
             logOutput.push(args.join(" "));
         };
@@ -223,6 +225,7 @@ describe("Results printing and error handling", () => {
     });
 
     afterEach(() => {
+        // eslint-disable-next-line no-console
         console.log = originalConsoleLog;
         process.stdout.write = originalStdoutWrite;
     });
