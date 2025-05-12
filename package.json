@@ -53,7 +53,8 @@
     "@babel/preset-env": "^7.27.2",
     "chalk": "^2.4.2",
     "commander": "^4.1.1",
-    "glob": "^7.2.3"
+    "glob": "^7.2.3",
+    "globals": "^16.1.0"
   },
   "babel": {
     "presets": [
