@@ -5,7 +5,7 @@ permissions:
 on:
   push:
     branches:
-      - tobrien
+      - main
       - 'release/**'
       - 'feature/**'
 
