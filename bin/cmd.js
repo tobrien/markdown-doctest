@@ -67,8 +67,6 @@ program
                 console.trace(err);
             }
 
-            console.log("config: %s", JSON.stringify(config, null, 2));
-
             // Run tests
             const results = doctest.runTests(files, config);
 
